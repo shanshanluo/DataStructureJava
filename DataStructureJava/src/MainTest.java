@@ -105,6 +105,33 @@ public class MainTest {
         }
     }
 
+	private static void testMeetGame() {
+        int players = 10;
+
+        ExerciseArrays arrayForGame = new ExerciseArrays(players);
+        ExerciseArrays.MeetGame game = arrayForGame.getGameObject();
+        Random rd = new Random();
+        ArrayList<Integer> winners;
+
+        while(true) {
+            int player1 = rd.nextInt(players);
+            int player2;
+            while ((player2 = rd.nextInt(players)) == player1) ;
+
+            Boolean status = game.meetNewPlayer(player1, player2);
+            if (status) {
+                System.out.println("Player1: " + player1 + ", player2: " + player2);
+                winners = game.checkWinner(player1, player2);
+                if (!winners.isEmpty()) {
+                    System.out.println("Game over !");
+                    System.out.println("Winner(s) : ");
+                    for (Integer w : winners)
+                        System.out.println("Player_" + w);
+                    break;
+                }
+            }
+        }
+    }
 
     public static void main(String[] args) {
 
@@ -114,6 +141,8 @@ public class MainTest {
 //      removeArrayElementRandom();
 
 //        generateArrayInRange(25, 20);
-        findDuplicateElements();
+//        findDuplicateElements();
+
+		testMeetGame();
     }
 }

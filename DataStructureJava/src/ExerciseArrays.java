@@ -7,10 +7,15 @@ import java.util.Arrays;
  * Created by x0241589 on 5/19/2017.
  */
 public class ExerciseArrays {
-    Random randomGenerator = null;
+    private Random randomGenerator = null;
+	private MeetGame game;
 
     public ExerciseArrays(){
         randomGenerator = new Random();
+    }
+	
+	public ExerciseArrays(int n){
+        game = new MeetGame(n);
     }
 
     public ExerciseArrays(Random rd){
@@ -83,5 +88,60 @@ public class ExerciseArrays {
             }
         }
         return out;
+    }
+	
+	    MeetGame getGameObject(){
+        return game;
+    }
+
+    public class MeetGame {
+        private int players = 0;
+        ArrayList<Boolean[]> recorders = new ArrayList<Boolean[]>();
+
+        public MeetGame(int n) {
+            players = n;
+            for (int row = 0; row < n; row++) {
+                Boolean[] ar = new Boolean[n];
+                Arrays.fill(ar, false);
+                recorders.add(ar);
+            }
+        }
+
+        public Boolean meetNewPlayer(int player1, int player2) {
+            if ((player1 >= players) || (player2 >= players)) {
+                throw new ArrayIndexOutOfBoundsException("--------- player ID is incorrect !\n");
+            } else if ((player1 < 0) || (player2 < 0)) {
+                throw new ArrayIndexOutOfBoundsException("--------- player ID is incorrect !\n");
+            }
+
+            if (recorders.get(player1)[player2]) {
+                return false;
+            }
+            recorders.get(player1)[player2] = true;
+            recorders.get(player2)[player1] = true;
+            return true;
+        }
+
+        public ArrayList<Integer> checkWinner(int player1, int player2) {
+            ArrayList<Integer> winners = new ArrayList<>();
+            Boolean[] candidate = recorders.get(player1);
+            int i = 0;
+            for (; i < candidate.length; i++) {
+                if ((!candidate[i]) && (i != player1))
+                    break;
+            }
+            if (i == candidate.length) {
+                winners.add(player1);
+            }
+            candidate = recorders.get(player2);
+            for (i = 0; i < candidate.length; i++) {
+                if ((!candidate[i]) && (i != player2))
+                    break;
+            }
+            if (i == candidate.length) {
+                winners.add(player2);
+            }
+            return winners;
+        }
     }
 }
